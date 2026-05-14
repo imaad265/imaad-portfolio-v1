@@ -60,7 +60,7 @@ export function SparklesCore({
                 // Disabled — the layer is pointer-events-none anyway
                 onClick: { enable: false },
                 onHover: { enable: false },
-                resize: true,
+                resize: { enable: true },
               },
             },
             particles: {
