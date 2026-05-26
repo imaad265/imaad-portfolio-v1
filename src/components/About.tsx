@@ -51,7 +51,7 @@ export default function About() {
       </div>
 
       {/* Ambient top glow */}
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[700px] -translate-x-1/2 rounded-full bg-red-950 opacity-10 blur-[220px]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[700px] w-[700px] max-w-full -translate-x-1/2 rounded-full bg-red-950 opacity-10 blur-[220px]" />
 
       {/* ── ContainerScroll entry ── */}
       <div className="relative z-10">
@@ -147,7 +147,7 @@ export default function About() {
       </div>
 
       {/* ── Flow Button CTA ── */}
-      <div className="relative z-10 flex flex-col items-center gap-6 pb-32 pt-12">
+      <div className="relative z-10 flex flex-col items-center gap-6 pb-32 pt-2 md:pt-6">
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -168,7 +168,7 @@ export default function About() {
       </div>
 
       {/* Bottom ambient glow */}
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[300px] w-[400px] -translate-x-1/2 rounded-full bg-red-950 opacity-[0.08] blur-[160px]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[300px] w-[400px] max-w-full -translate-x-1/2 rounded-full bg-red-950 opacity-[0.08] blur-[160px]" />
     </section>
   )
 }

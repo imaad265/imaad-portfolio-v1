@@ -12,12 +12,6 @@ const instagramAccounts = [
     href: "https://instagram.com/imaad.visuals",
     primary: true,
   },
-  {
-    label: "Personal",
-    username: "@imaad265",
-    href: "https://instagram.com/imaad265",
-    primary: false,
-  },
 ]
 
 // ── Divider ───────────────────────────────────────────────────────────────────

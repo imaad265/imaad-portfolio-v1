@@ -16,32 +16,32 @@ function pauseAllExcept(except?: HTMLVideoElement | null) {
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const cinematicItems = [
-  { src: "/videos/radissonMovie.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
-  { src: "/videos/video3.MP4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
-  { src: "/videos/video2.MP4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
+  { src: "/videos/Radissonmovie.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
+  { src: "/videos/Visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
+  { src: "/videos/Ideamoviereel.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
   { src: "/videos/Horror-film.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
 ]
 
 const fastPacedItems = [
-  { src: "/videos/AirportTransition.mp4", title: "Velocity" },
-  { src: "/videos/EatRoute.mp4", title: "Impact"     },
-  { src: "/videos/CCD.mp4", title: "Rush"   },
-  { src: "/videos/video4.MP4", title: "Surge"    },
-  { src: "/videos/video1.MP4", title: "Drift"    },
+  { src: "/videos/Airporttransition.mp4", title: "Velocity" },
+  { src: "/videos/Eatroute.mp4", title: "Impact"     },
+  { src: "/videos/Ccd.mp4", title: "Rush"   },
+  { src: "/videos/Shawafelfast.mp4", title: "Surge"    },
+  { src: "/videos/GvEdit.mp4", title: "Drift"    },
 ]
 
 const atmosphereItems = [
-  { src: "/videos/radissonEdit.mp4", title: "Haze" },
-  { src: "/videos/travelVlogEdit.mp4", title: "Euphoria"   },
-  { src: "/videos/shawafelslow.mp4", title: "Fade"    },
+  { src: "/videos/Radissonedit.mp4", title: "Haze" },
+  { src: "/videos/Travelvlogedit.mp4", title: "Euphoria"   },
+  { src: "/videos/Shawafelslow.mp4", title: "Fade"    },
   { src: "/videos/0321.mp4", title: "Void"    },
-  { src: "/videos/carEdit.mp4", title: "Obsidian"    },
+  { src: "/videos/Caredit.mp4", title: "Obsidian"    },
 ]
 
 const archiveItems = [
-  { title: "Fragments from the early days.", year: "2024", src: "/videos/jali.MP4" },
+  { title: "Fragments from the early days.", year: "2024", src: "/videos/Jali.mp4" },
   { title: "An early directing experiment.",    year: "2024", src: "/videos/Love-story.mp4" },
-  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/TakeaBreak.mp4" },
+  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/TakeABreak.mp4" },
 ]
 
 // ── VideoControls ─────────────────────────────────────────────────────────────
@@ -644,7 +644,7 @@ export default function SelectedVisions() {
       </div>
 
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute left-1/2 top-24 h-[400px] w-[500px] -translate-x-1/2 rounded-full bg-red-950 opacity-[0.07] blur-[180px]"/>
+      <div className="pointer-events-none absolute left-1/2 top-24 h-[400px] w-[500px] max-w-full -translate-x-1/2 rounded-full bg-red-950 opacity-[0.07] blur-[180px]"/>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-16">
         {/* Heading — "Portfolio" label removed */}
@@ -725,7 +725,7 @@ export default function SelectedVisions() {
         <div className="py-20"/>
       </div>
 
-      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[200px] w-[400px] -translate-x-1/2 rounded-full bg-red-950 opacity-[0.06] blur-[140px]"/>
+      <div className="pointer-events-none absolute bottom-0 left-1/2 h-[200px] w-[400px] max-w-full -translate-x-1/2 rounded-full bg-red-950 opacity-[0.06] blur-[140px]"/>
     </section>
   )
 }

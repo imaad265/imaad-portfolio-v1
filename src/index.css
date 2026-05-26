@@ -4,11 +4,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent any element from creating horizontal scroll on mobile.
+   overflow-x: hidden on html is the viewport-level guard.
+   background-color: #000 ensures paint gaps during fast scroll
+   show black instead of the browser's default white.
+   overscroll-behavior-x: none prevents iOS elastic horizontal bounce
+   from revealing the background behind page content. */
+html,
 body {
-  cursor: none;
+  overflow-x: hidden;
+  background-color: #000;
+  overscroll-behavior-x: none;
 }
 
 body {
+  cursor: none;
   font-family: 'Inter', sans-serif;
 }
 

@@ -7,10 +7,10 @@ interface TextRevealByWordProps {
   className?: string
 }
 
-// Words finish revealing at 80% of scroll progress.
-// The remaining 20% is a comfortable reading buffer before the
-// element exits, so the last sentence is never cut off mid-reveal.
-const REVEAL_CUTOFF = 0.80
+// Words finish revealing at 95% of scroll progress.
+// The remaining 5% is a minimal reading buffer before the
+// element exits, keeping the CTA visually connected to the paragraph.
+const REVEAL_CUTOFF = 0.95
 
 const TextRevealByWord: FC<TextRevealByWordProps> = ({ text, className }) => {
   const targetRef = useRef<HTMLDivElement | null>(null)
@@ -18,7 +18,7 @@ const TextRevealByWord: FC<TextRevealByWordProps> = ({ text, className }) => {
   const words = text.split(" ")
 
   return (
-    <div ref={targetRef} className={cn("relative z-0 h-[250vh]", className)}>
+    <div ref={targetRef} className={cn("relative z-0 h-[108vh]", className)}>
       {/* h-screen keeps the sticky panel exactly one viewport tall on every device */}
       <div className="sticky top-0 mx-auto flex h-screen max-w-4xl items-center bg-transparent px-4 py-10 md:px-8 md:py-[5rem]">
         <p className="flex flex-wrap p-4 text-lg font-medium leading-relaxed text-white/20 md:p-8 md:text-2xl lg:p-10 lg:text-3xl xl:text-4xl">
