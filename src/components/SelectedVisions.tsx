@@ -16,32 +16,32 @@ function pauseAllExcept(except?: HTMLVideoElement | null) {
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const cinematicItems = [
-  { src: "/videos/Radissonmovie.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
-  { src: "/videos/Visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
-  { src: "/videos/Ideamoviereel.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
-  { src: "/videos/Horror-film.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
+  { src: "/videos/radissonfilm.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
+  { src: "/videos/visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
+  { src: "/videos/ideafilm.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
+  { src: "/videos/horrorfilm.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
 ]
 
 const fastPacedItems = [
-  { src: "/videos/Airporttransition.mp4", title: "Velocity" },
-  { src: "/videos/Eatroute.mp4", title: "Impact"     },
-  { src: "/videos/Ccd.mp4", title: "Rush"   },
-  { src: "/videos/Shawafelfast.mp4", title: "Surge"    },
-  { src: "/videos/GvEdit.mp4", title: "Drift"    },
+  { src: "/videos/airport.mp4", title: "Velocity" },
+  { src: "/videos/eatroute.mp4", title: "Impact"     },
+  { src: "/videos/ccd.mp4", title: "Rush"   },
+  { src: "/videos/shawafelfast.mp4", title: "Surge"    },
+  { src: "/videos/gv.mp4", title: "Drift"    },
 ]
 
 const atmosphereItems = [
-  { src: "/videos/Radissonedit.mp4", title: "Haze" },
-  { src: "/videos/Travelvlogedit.mp4", title: "Euphoria"   },
-  { src: "/videos/Shawafelslow.mp4", title: "Fade"    },
-  { src: "/videos/0321.mp4", title: "Void"    },
-  { src: "/videos/Caredit.mp4", title: "Obsidian"    },
+  { src: "/videos/radissonshort.mp4", title: "Haze" },
+  { src: "/videos/travel.mp4", title: "Euphoria"   },
+  { src: "/videos/shawafelslow.mp4", title: "Fade"    },
+  { src: "/videos/farmhouse.mp4", title: "Void"    },
+  { src: "/videos/car.mp4", title: "Obsidian"    },
 ]
 
 const archiveItems = [
-  { title: "Fragments from the early days.", year: "2024", src: "/videos/Jali.mp4" },
-  { title: "An early directing experiment.",    year: "2024", src: "/videos/Love-story.mp4" },
-  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/TakeABreak.mp4" },
+  { title: "Fragments from the early days.", year: "2024", src: "/videos/jali.mp4" },
+  { title: "An early directing experiment.",    year: "2024", src: "/videos/lovestory.mp4" },
+  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/takeAbreak.mp4" },
 ]
 
 // ── VideoControls ─────────────────────────────────────────────────────────────

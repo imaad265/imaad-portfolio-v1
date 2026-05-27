@@ -47,7 +47,7 @@ export default function Contact() {
 
         <Divider color="rgba(255,255,255,0.04)" />
 
-        <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: "rgba(255,255,255,0.08)" }}>
+        <p className="text-[9px] tracking-[0.45em] uppercase" style={{ color: "rgba(255,255,255,0.28)" }}>
           Scroll to connect
         </p>
       </FlowSection>
