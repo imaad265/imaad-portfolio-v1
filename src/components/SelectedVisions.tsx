@@ -18,15 +18,15 @@ function pauseAllExcept(except?: HTMLVideoElement | null) {
 const cinematicItems = [
   { src: "/videos/radissonfilm.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
   { src: "/videos/Ideafilmcom.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
-  { src: "/videos/visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
+  { src: "/videos/Visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
   { src: "/videos/Horrorfilmcom.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
 ]
 
 const fastPacedItems = [
   { src: "/videos/airport.mp4", title: "Velocity" },
-  { src: "/videos/eatroute.mp4", title: "Impact"     },
-  { src: "/videos/ccd.mp4", title: "Rush"   },
-  { src: "/videos/shawafelfast.mp4", title: "Surge"    },
+  { src: "/videos/EatRoute.mp4", title: "Impact"     },
+  { src: "/videos/CCD.mp4", title: "Rush"   },
+  { src: "/videos/Shawafelfast.mp4", title: "Surge"    },
   { src: "/videos/gv.mp4", title: "Drift"    },
 ]
 
@@ -39,9 +39,9 @@ const atmosphereItems = [
 ]
 
 const archiveItems = [
-  { title: "Fragments from the early days.", year: "2024", src: "/videos/jali.mp4" },
+  { title: "Fragments from the early days.", year: "2024", src: "/videos/jali.MP4" },
   { title: "An early directing experiment.",    year: "2024", src: "/videos/Lovestorycom.mp4" },
-  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/takeAbreak.mp4" },
+  { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/TakeaBreak.mp4" },
 ]
 
 // ── VideoControls ─────────────────────────────────────────────────────────────

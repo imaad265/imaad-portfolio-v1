@@ -26,14 +26,14 @@ const projects = [
     title: "Visual Edit",
     description: "Where visuals speak louder than words.",
     image: visualEditImg,
-    video: "/videos/visualfilm.mp4",
+    video: "/videos/Visualfilm.mp4",
     vertical: false,
   },
   {
     title: "Promo Edit",
     description: "High-impact cuts crafted for the moment.",
     image: promoEditImg,
-    video: "/videos/shawafelfast.mp4",
+    video: "/videos/Shawafelfast.mp4",
     vertical: true,
   },
 ]
