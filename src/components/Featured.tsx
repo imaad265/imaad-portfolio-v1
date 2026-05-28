@@ -19,7 +19,7 @@ const projects = [
     title: "Cinematic Story",
     description: "Visual narratives that move beyond the frame.",
     image: cinematicStoryImg,
-    video: "/videos/ideafilm.mp4",
+    video: "/videos/Ideafilmcom.mp4",
     vertical: false,
   },
   {

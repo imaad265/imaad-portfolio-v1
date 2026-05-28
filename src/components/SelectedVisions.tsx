@@ -17,9 +17,9 @@ function pauseAllExcept(except?: HTMLVideoElement | null) {
 // ── Data ──────────────────────────────────────────────────────────────────────
 const cinematicItems = [
   { src: "/videos/radissonfilm.mp4", title: "Afterglow",    desc: "Cinematic living through atmosphere and motion."  },
+  { src: "/videos/Ideafilmcom.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
   { src: "/videos/visualfilm.mp4",        title: "Fragments", desc: "Experimental visuals captured on iPhone 14 Pro."  },
-  { src: "/videos/ideafilm.mp4",        title: "Silence",      desc: "A story-driven cinematic short focused on emotion."         },
-  { src: "/videos/horrorfilm.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
+  { src: "/videos/Horrorfilmcom.mp4",    title: "Presence",   desc: "Psychological tension built through cinematic framing."          },
 ]
 
 const fastPacedItems = [
@@ -32,7 +32,7 @@ const fastPacedItems = [
 
 const atmosphereItems = [
   { src: "/videos/radissonshort.mp4", title: "Haze" },
-  { src: "/videos/travel.mp4", title: "Euphoria"   },
+  { src: "/videos/Travelcom.mp4", title: "Euphoria"   },
   { src: "/videos/shawafelslow.mp4", title: "Fade"    },
   { src: "/videos/farmhouse.mp4", title: "Void"    },
   { src: "/videos/car.mp4", title: "Obsidian"    },
@@ -40,7 +40,7 @@ const atmosphereItems = [
 
 const archiveItems = [
   { title: "Fragments from the early days.", year: "2024", src: "/videos/jali.mp4" },
-  { title: "An early directing experiment.",    year: "2024", src: "/videos/lovestory.mp4" },
+  { title: "An early directing experiment.",    year: "2024", src: "/videos/Lovestorycom.mp4" },
   { title: "Early frames. The beginning of the vision.",   year: "2024", src: "/videos/takeAbreak.mp4" },
 ]
 
