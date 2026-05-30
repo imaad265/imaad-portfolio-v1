@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useMotionValue, animate } from "framer-motion"
 import {
   ChevronLeft, ChevronRight, ChevronDown,
   Play, Pause, Volume2, VolumeX, Maximize, X,
@@ -387,8 +387,20 @@ function CarouselSection({ items, speed, filterStyle }: CarouselProps) {
   const [playing,   setPlaying]   = useState(false)
   const [muted,     setMuted]     = useState(true)
   const [fsOpen,    setFsOpen]    = useState(false)
-  const videoRefs   = useRef<(HTMLVideoElement | null)[]>([])
-  const touchStartX = useRef(0)
+  const videoRefs    = useRef<(HTMLVideoElement | null)[]>([])
+  const touchStartX  = useRef(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const trackRef     = useRef<HTMLDivElement>(null)
+  const slideX       = useMotionValue(0)
+
+  // Spring config: snappier for fast-paced, floatier for atmosphere
+  const trackSpring = speed < 0.6
+    ? { type: "spring" as const, stiffness: 340, damping: 36, mass: 0.9 }
+    : { type: "spring" as const, stiffness: 190, damping: 26, mass: 1.1 }
+
+  const cardSpring = speed < 0.6
+    ? { type: "spring" as const, stiffness: 340, damping: 36, mass: 0.9 }
+    : { type: "spring" as const, stiffness: 190, damping: 26, mass: 1.1 }
 
   const setRef = useCallback((i: number) => (el: HTMLVideoElement | null) => {
     const prev = videoRefs.current[i]
@@ -396,6 +408,32 @@ function CarouselSection({ items, speed, filterStyle }: CarouselProps) {
     if (el)   regVideo(el)
     videoRefs.current[i] = el
   }, [])
+
+  const computeTargetX = useCallback(() => {
+    const track = trackRef.current
+    const container = containerRef.current
+    if (!track || !container) return null
+    const cards = Array.from(track.children) as HTMLElement[]
+    const card = cards[activeIdx]
+    if (!card) return null
+    return container.offsetWidth / 2 - (card.offsetLeft + card.offsetWidth / 2)
+  }, [activeIdx])
+
+  // Spring-slide track whenever active card changes
+  useEffect(() => {
+    const target = computeTargetX()
+    if (target === null) return
+    animate(slideX, target, trackSpring)
+  }, [activeIdx]) // eslint-disable-line
+
+  // Snap to correct position on first render (no animation)
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      const target = computeTargetX()
+      if (target !== null) slideX.set(target)
+    })
+    return () => cancelAnimationFrame(id)
+  }, []) // eslint-disable-line
 
   useEffect(() => {
     videoRefs.current.forEach((v, i) => {
@@ -440,87 +478,94 @@ function CarouselSection({ items, speed, filterStyle }: CarouselProps) {
       />
 
       <div className="flex flex-col items-center gap-6 py-8 md:py-12">
+        {/* Clipping container — track slides inside */}
         <div
-          className="flex items-center justify-center w-full px-4 overflow-visible"
-          style={{ gap: "clamp(8px, 1.5vw, 20px)" }}
+          ref={containerRef}
+          className="relative w-full overflow-hidden"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {items.map((item, i) => {
-            const d = dist(i)
-            const isAct = d === 0
-            const scale   = isAct ? 1 : d === 1 ? 0.74 : 0.56
-            const opacity = isAct ? 1 : d === 1 ? 0.52 : 0.22
-            const blur    = isAct ? "blur(0px)" : d === 1 ? "blur(1px)" : "blur(2.5px)"
+          <motion.div
+            ref={trackRef}
+            className="flex items-center"
+            style={{ x: slideX, gap: "clamp(8px, 1.5vw, 20px)" }}
+          >
+            {items.map((item, i) => {
+              const d = dist(i)
+              const isAct = d === 0
+              const scale   = isAct ? 1 : d === 1 ? 0.74 : 0.56
+              const opacity = isAct ? 1 : d === 1 ? 0.52 : 0.22
+              const blur    = isAct ? "blur(0px)" : d === 1 ? "blur(1px)" : "blur(2.5px)"
 
-            return (
-              <motion.div
-                key={i}
-                className="relative overflow-hidden rounded-sm flex-shrink-0 cursor-pointer"
-                style={{
-                  width: "clamp(88px, 11vw, 148px)",
-                  aspectRatio: "9/16",
-                  zIndex: isAct ? 10 : 5 - d,
-                }}
-                animate={{ scale, opacity, filter: blur }}
-                transition={{ duration: speed, ease: [0.4, 0, 0.2, 1] }}
-                onClick={() => isAct ? togglePlay() : setActiveIdx(i)}
-              >
-                {/* Video — only loads for the active card */}
-                <video
-                  ref={setRef(i)}
-                  src={isAct ? item.src : undefined}
-                  muted={muted} loop playsInline preload="none"
-                  className="w-full h-full object-cover pointer-events-none"
-                  style={{ filter: filterStyle }}
-                  onPause={() => { if (isAct) setPlaying(false) }}
-                />
+              return (
+                <motion.div
+                  key={i}
+                  className="relative overflow-hidden rounded-sm flex-shrink-0 cursor-pointer"
+                  style={{
+                    width: "clamp(88px, 11vw, 148px)",
+                    aspectRatio: "9/16",
+                    zIndex: isAct ? 10 : 5 - d,
+                  }}
+                  animate={{ scale, opacity, filter: blur }}
+                  transition={cardSpring}
+                  onClick={() => isAct ? togglePlay() : setActiveIdx(i)}
+                >
+                  {/* Video — only loads for the active card */}
+                  <video
+                    ref={setRef(i)}
+                    src={isAct ? item.src : undefined}
+                    muted={muted} loop playsInline preload="none"
+                    className="w-full h-full object-cover pointer-events-none"
+                    style={{ filter: filterStyle }}
+                    onPause={() => { if (isAct) setPlaying(false) }}
+                  />
 
-                {/* Thumbnail — fades out when active card is playing */}
-                <motion.img
-                  src={thumbnailMap[item.src]}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                  style={{ filter: filterStyle }}
-                  animate={{ opacity: isAct && playing ? 0 : 1 }}
-                  transition={{ duration: 0.4 }}
-                />
+                  {/* Thumbnail — fades out when active card is playing */}
+                  <motion.img
+                    src={thumbnailMap[item.src]}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                    style={{ filter: filterStyle }}
+                    animate={{ opacity: isAct && playing ? 0 : 1 }}
+                    transition={{ duration: 0.4 }}
+                  />
 
-                {/* gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"/>
+                  {/* gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"/>
 
-                {/* border */}
-                <div
-                  className="absolute inset-0 rounded-sm pointer-events-none"
-                  style={{ border: isAct ? "1px solid rgba(185,28,28,0.38)" : "1px solid rgba(255,255,255,0.05)" }}
-                />
+                  {/* border */}
+                  <div
+                    className="absolute inset-0 rounded-sm pointer-events-none"
+                    style={{ border: isAct ? "1px solid rgba(185,28,28,0.38)" : "1px solid rgba(255,255,255,0.05)" }}
+                  />
 
-                {/* active: title + controls */}
-                <AnimatePresence>
-                  {isAct && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
-                      className="absolute bottom-3 left-0 right-0 px-3"
-                    >
-                      <p className="text-center text-[7px] tracking-[0.45em] text-white/45 uppercase mb-2">
-                        {item.title}
-                      </p>
-                      <div className="flex justify-center">
-                        <VideoControls
-                          playing={playing} muted={muted}
-                          onPlay={togglePlay}
-                          onMute={toggleMute}
-                          onFs={() => setFsOpen(true)}
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )
-          })}
+                  {/* active: title + controls */}
+                  <AnimatePresence>
+                    {isAct && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }} transition={{ duration: 0.3 }}
+                        className="absolute bottom-3 left-0 right-0 px-3"
+                      >
+                        <p className="text-center text-[7px] tracking-[0.45em] text-white/45 uppercase mb-2">
+                          {item.title}
+                        </p>
+                        <div className="flex justify-center">
+                          <VideoControls
+                            playing={playing} muted={muted}
+                            onPlay={togglePlay}
+                            onMute={toggleMute}
+                            onFs={() => setFsOpen(true)}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )
+            })}
+          </motion.div>
         </div>
 
         {/* Navigation row */}
