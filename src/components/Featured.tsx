@@ -104,7 +104,12 @@ export default function Featured() {
   }, [active])
 
   const handleClick = (index: number) => {
-    // Toggle: clicking the open card collapses; clicking any other card switches
+    // On mobile, don't close via card click — black letterbox bars sit inside
+    // the card div but outside the cross-origin iframe, so tapping them fires
+    // this handler. The document click-away listener already handles close-on-
+    // outside-tap, so we just skip the toggle for already-active mobile cards.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches
+    if (isMobile && active === index) return
     setActive(prev => (prev === index ? null : index))
   }
 
