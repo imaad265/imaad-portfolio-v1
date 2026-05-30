@@ -12,28 +12,32 @@ const projects = [
     title: "Travel Reel",
     description: "A cinematic journey through distant horizons.",
     image: travelReelImg,
-    video: "/videos/airport.mp4",
+    video: null,
+    vimeoId: "1196939151",
     vertical: true,
   },
   {
     title: "Cinematic Story",
     description: "Visual narratives that move beyond the frame.",
     image: cinematicStoryImg,
-    video: "/videos/Ideafilmcom.mp4",
+    video: null,
+    vimeoId: "1196949858",
     vertical: false,
   },
   {
     title: "Visual Edit",
     description: "Where visuals speak louder than words.",
     image: visualEditImg,
-    video: "/videos/Visualfilm.mp4",
+    video: null,
+    vimeoId: "1196951088",
     vertical: false,
   },
   {
     title: "Promo Edit",
     description: "High-impact cuts crafted for the moment.",
     image: promoEditImg,
-    video: "/videos/Shawafelfast.mp4",
+    video: null,
+    vimeoId: "1196952040",
     vertical: true,
   },
 ]
@@ -61,15 +65,39 @@ export default function Featured() {
   // grid. Both layouts live in the DOM (CSS hides the inactive one) so we need
   // separate refs. Browsers block audio on display:none elements, so only the
   // visible layout's video actually plays — the other call fails silently.
-  const desktopRefs = useRef<(HTMLVideoElement | null)[]>([])
-  const mobileRefs  = useRef<(HTMLVideoElement | null)[]>([])
+  const desktopRefs     = useRef<(HTMLVideoElement | null)[]>([])
+  const mobileRefs      = useRef<(HTMLVideoElement | null)[]>([])
+  const desktopCardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const mobileCardRefs  = useRef<(HTMLDivElement | null)[]>([])
+
+  // Global click-away: close the active card when the user clicks outside it.
+  // Clicks inside an iframe (Vimeo) are cross-origin and never reach this
+  // listener, so play/pause is unaffected. Clicks on the card itself still
+  // bubble here, but we return early and let the card's own onClick handle them.
+  useEffect(() => {
+    if (active === null) return
+
+    function onDocClick(e: MouseEvent) {
+      const target = e.target as Node
+      const inside = projects.some((_, i) =>
+        desktopCardRefs.current[i]?.contains(target) ||
+        mobileCardRefs.current[i]?.contains(target)
+      )
+      if (!inside) setActive(null)
+    }
+
+    document.addEventListener("click", onDocClick)
+    return () => document.removeEventListener("click", onDocClick)
+  }, [active])
 
   useEffect(() => {
-    // Stop every video first — prevents any previous card from leaking audio
-    desktopRefs.current.forEach(stopVideo)
-    mobileRefs.current.forEach(stopVideo)
+    // Stop every non-Vimeo video first — prevents any previous card from leaking audio
+    desktopRefs.current.forEach((v, i) => { if (!projects[i].vimeoId) stopVideo(v) })
+    mobileRefs.current.forEach((v, i)  => { if (!projects[i].vimeoId) stopVideo(v) })
 
     if (active === null) return
+    // Vimeo cards manage their own playback via the iframe
+    if (projects[active].vimeoId) return
 
     startVideo(desktopRefs.current[active])
     startVideo(mobileRefs.current[active])
@@ -108,6 +136,7 @@ export default function Featured() {
           return (
             <div
               key={index}
+              ref={(el) => { desktopCardRefs.current[index] = el }}
               onClick={() => handleClick(index)}
               className="relative overflow-hidden rounded-2xl cursor-pointer bg-black"
               style={{
@@ -129,22 +158,60 @@ export default function Featured() {
                 }}
               />
 
-              {/* Video — hidden under the poster, fades in when active.
-                  Vertical (9:16) videos use contain to preserve composition;
-                  horizontal (16:9) videos use cover to fill the wide card. */}
-              <video
-                ref={(el) => { desktopRefs.current[index] = el }}
-                src={item.video}
-                loop
-                playsInline
-                preload="metadata"
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                style={{
-                  objectFit: "contain",
-                  opacity: isActive ? 1 : 0,
-                  transition: "opacity 0.52s ease 0.08s",
-                }}
-              />
+              {/* Video or Vimeo embed — fades in when active.
+                  Iframe is sized to the video's natural aspect ratio so the
+                  black letterbox/pillarbox zones remain part of the card div.
+                  Clicks inside the iframe → Vimeo play/pause.
+                  Clicks in the bar zones → card onClick → collapse. */}
+              {item.vimeoId ? (
+                isActive && (
+                  <iframe
+                    key={`vimeo-d-${index}`}
+                    src={`https://player.vimeo.com/video/${item.vimeoId}?autoplay=0&title=0&byline=0&portrait=0&badge=0&dnt=1`}
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    style={item.vertical ? {
+                      // 9:16 vertical — pillarboxed (bars left & right)
+                      position: "absolute",
+                      top: 0,
+                      height: "100%",
+                      width: "auto",
+                      aspectRatio: "9/16",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      border: "none",
+                      opacity: 1,
+                      transition: "opacity 0.52s ease 0.08s",
+                    } : {
+                      // 16:9 horizontal — letterboxed (bars top & bottom)
+                      position: "absolute",
+                      left: 0,
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "16/9",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      border: "none",
+                      opacity: 1,
+                      transition: "opacity 0.52s ease 0.08s",
+                    }}
+                  />
+                )
+              ) : (
+                <video
+                  ref={(el) => { desktopRefs.current[index] = el }}
+                  src={item.video!}
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  style={{
+                    objectFit: "contain",
+                    opacity: isActive ? 1 : 0,
+                    transition: "opacity 0.52s ease 0.08s",
+                  }}
+                />
+              )}
 
               {/* Persistent dark gradient — heavier at bottom for text legibility */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent pointer-events-none" />
@@ -217,6 +284,7 @@ export default function Featured() {
           return (
             <div
               key={`m-${index}`}
+              ref={(el) => { mobileCardRefs.current[index] = el }}
               onClick={() => handleClick(index)}
               className="relative overflow-hidden rounded-2xl cursor-pointer bg-black"
               style={{ aspectRatio: "9 / 16" }}
@@ -234,21 +302,56 @@ export default function Featured() {
                 }}
               />
 
-              {/* Video — vertical fills the 9:16 card exactly (cover);
-                  horizontal letterboxes cleanly rather than over-cropping (contain). */}
-              <video
-                ref={(el) => { mobileRefs.current[index] = el }}
-                src={item.video}
-                loop
-                playsInline
-                preload="metadata"
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                style={{
-                  objectFit: item.vertical ? "cover" : "contain",
-                  opacity: isActive ? 1 : 0,
-                  transition: "opacity 0.45s ease",
-                }}
-              />
+              {/* Video or Vimeo embed — shown when active */}
+              {item.vimeoId ? (
+                isActive && (
+                  <iframe
+                    key={`vimeo-m-${index}`}
+                    src={`https://player.vimeo.com/video/${item.vimeoId}?autoplay=0&title=0&byline=0&portrait=0&badge=0&dnt=1`}
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    style={item.vertical ? {
+                      // 9:16 in 9:16 card — fills exactly, no bars
+                      position: "absolute",
+                      top: 0,
+                      height: "100%",
+                      width: "auto",
+                      aspectRatio: "9/16",
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      border: "none",
+                      opacity: 1,
+                      transition: "opacity 0.45s ease",
+                    } : {
+                      // 16:9 in 9:16 card — letterboxed (bars top & bottom)
+                      position: "absolute",
+                      left: 0,
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "16/9",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      border: "none",
+                      opacity: 1,
+                      transition: "opacity 0.45s ease",
+                    }}
+                  />
+                )
+              ) : (
+                <video
+                  ref={(el) => { mobileRefs.current[index] = el }}
+                  src={item.video!}
+                  loop
+                  playsInline
+                  preload="metadata"
+                  className="absolute inset-0 w-full h-full pointer-events-none"
+                  style={{
+                    objectFit: item.vertical ? "cover" : "contain",
+                    opacity: isActive ? 1 : 0,
+                    transition: "opacity 0.45s ease",
+                  }}
+                />
+              )}
 
               {/* Gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent pointer-events-none" />
