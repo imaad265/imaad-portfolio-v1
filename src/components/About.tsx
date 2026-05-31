@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { ContainerScroll } from "./ui/container-scroll-animation"
 import { TextRevealByWord } from "./ui/text-reveal"
+import { MobileTextReveal } from "./ui/mobile-text-reveal"
 import { FlowButton } from "./ui/flow-button"
 import { SparklesCore } from "./ui/sparkles"
 
@@ -141,9 +142,12 @@ export default function About() {
         </ContainerScroll>
       </div>
 
-      {/* ── Text Reveal ── */}
-      <div className="relative z-10">
+      {/* ── Text Reveal — desktop uses sticky scroll-progress, mobile uses scroll-driven ── */}
+      <div className="relative z-10 hidden md:block">
         <TextRevealByWord text={ABOUT_TEXT} />
+      </div>
+      <div className="relative z-10 block md:hidden">
+        <MobileTextReveal text={ABOUT_TEXT} />
       </div>
 
       {/* ── Flow Button CTA ── */}
